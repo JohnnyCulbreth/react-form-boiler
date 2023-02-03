@@ -1,25 +1,72 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import axios from 'axios';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      firstName: '',
+      lastName: '',
+    };
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  handleSubmit = (e) => {
+    e.preventDefault();
+
+    axios
+      .post('https://url.com/user', {
+        firstName: this.state.firstName,
+        lastName: this.state.lastName,
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+
+    this.setState({
+      firstName: '',
+      lastName: '',
+    });
+  };
+
+  render() {
+    return (
+      <div className='App'>
+        <header className='App-header'>
+          <p>My 2nd Form in React</p>
+          <form
+            onSubmit={() => {
+              this.handleSubmit();
+            }}
+          >
+            <input
+              name='firstName'
+              type='text'
+              value={this.state.firstName}
+              onChange={(e) => this.handleChange(e)}
+            ></input>
+            <input
+              name='lastName'
+              type='text'
+              value={this.state.lastName}
+              onChange={(e) => this.handleChange(e)}
+            ></input>
+            <input type='submit'></input>
+          </form>
+        </header>
+      </div>
+    );
+  }
 }
 
 export default App;
